@@ -1,15 +1,24 @@
 import { useState } from "react";
 
-export default function ChannelCard({ channel, onPlay, onFav }) {
+export default function ChannelCard({
+  channel,
+  onPlay,
+  onFav,
+  isDead,
+  onTest,
+}) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
     <div
-      className="channelCard"
+      className={`channelCard ${isDead ? "dead-channel" : ""}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="card-content" onClick={() => onPlay(channel.url)}>
+      <div
+        className="card-content"
+        onClick={() => !isDead && onPlay(channel.url)}
+      >
         {channel.logo ? (
           <img
             src={channel.logo}
@@ -23,19 +32,37 @@ export default function ChannelCard({ channel, onPlay, onFav }) {
         ) : (
           <div className="logo-placeholder">📺</div>
         )}
-        <div className="channelName">{channel.name}</div>
+        <div className="channelName">
+          {channel.name}
+          {isDead && <span className="dead-badge">💀</span>}
+        </div>
       </div>
 
       {isHovered && (
-        <button
-          className="fav-button"
-          onClick={(e) => {
-            e.stopPropagation();
-            onFav(channel);
-          }}
-        >
-          ⭐
-        </button>
+        <div className="card-actions">
+          {!isDead && (
+            <button
+              className="action-button fav-button"
+              onClick={(e) => {
+                e.stopPropagation();
+                onFav(channel);
+              }}
+              title="Add to favorites"
+            >
+              ⭐
+            </button>
+          )}
+          <button
+            className="action-button test-button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onTest();
+            }}
+            title="Test channel"
+          >
+            {isDead ? "🩺 Retest" : "🔍 Test"}
+          </button>
+        </div>
       )}
     </div>
   );

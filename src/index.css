@@ -790,3 +790,140 @@ body {
   position: relative;
   margin-bottom: 2rem;
 }
+
+/* Channel Skipper */
+.header-tools {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.channel-skipper {
+  position: relative;
+}
+
+.skipper-toggle {
+  background: #2d2d2d;
+  border: 1px solid #4f46e5;
+  color: #4f46e5;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.skipper-toggle:hover {
+  background: #4f46e5;
+  color: white;
+}
+
+.skipper-options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 0.5rem;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 0.5rem;
+  min-width: 200px;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.skipper-options button {
+  width: 100%;
+  text-align: left;
+  padding: 0.75rem;
+  background: none;
+  border: none;
+  color: #ddd;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.skipper-options button:hover {
+  background: #2a2a2a;
+  color: #4f46e5;
+}
+
+.skipper-options button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.skipper-options small {
+  display: block;
+  padding: 0.5rem;
+  color: #666;
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+.dead-toggle {
+  background: #2d2d2d;
+  border: 1px solid #dc2626;
+  color: #dc2626;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.dead-toggle.active {
+  background: #dc2626;
+  color: white;
+}
+
+.dead-toggle:hover {
+  background: #dc2626;
+  color: white;
+}
+
+/* Dead Channel Styling */
+.channelCard.dead-channel {
+  opacity: 0.5;
+  border-color: #dc2626;
+}
+
+.channelCard.dead-channel:hover {
+  opacity: 0.7;
+}
+
+.dead-badge {
+  margin-left: 0.25rem;
+  font-size: 0.8rem;
+}
+
+.test-button {
+  background: #2d2d2d !important;
+}
+
+.test-button:hover {
+  background: #3d3d3d !important;
+}
+
+.dead-count {
+  color: #dc2626;
+  font-size: 0.8rem;
+  margin-left: 0.5rem;
+}
+
+.testing-message {
+  text-align: center;
+  padding: 2rem;
+  color: #4f46e5;
+}
+
+/* Update existing spinner */
+.spinner {
+  border: 3px solid #333;
+  border-top: 3px solid #4f46e5;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
