@@ -1,11 +1,11 @@
-export default function ChannelCard({ channel, onPlay, onFav }) {
+export default function ChannelCard({ channel, onPlay }) {
   return (
-    <div className="channelCard">
-      <div onClick={() => onPlay(channel.url)} className="channelName">
-        {channel.name}
-      </div>
+    <div className="channelCard" onClick={() => onPlay(channel.url)}>
+      {channel.logo && (
+        <img src={channel.logo} alt={channel.name} className="logo" />
+      )}
 
-      <button onClick={() => onFav(channel)}>⭐</button>
+      <div className="channelName">{channel.name}</div>
     </div>
   );
 }

@@ -37,3 +37,31 @@ body {
 .channelCard:hover {
   background: #333;
 }
+
+.logo {
+  width: 100%;
+  height: 60px;
+  object-fit: contain;
+  margin-bottom: 6px;
+}
+
+.categories {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.categories button {
+  padding: 6px 10px;
+}
+
+.categories .active {
+  background: #4f46e5;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+}
