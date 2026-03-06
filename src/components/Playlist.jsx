@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import parseM3U from "../utils/parseM3U";
 import ChannelCard from "./ChannelCard";
 import SearchBar from "./SearchBar";
+import PlaylistSource from "./PlaylistSource";
 
 export default function Playlist({
   onPlay,
@@ -11,46 +12,79 @@ export default function Playlist({
   onChannelsLoaded,
   searchTerm,
 }) {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [currentSource, setCurrentSource] = useState("India");
 
-  useEffect(() => {
-    fetchChannels();
-  }, []);
-
-  async function fetchChannels() {
+  async function handleSourceChange(type, source, name) {
     try {
       setLoading(true);
-      const response = await fetch(
-        "https://iptv-org.github.io/iptv/countries/in.m3u",
-      );
-      const text = await response.text();
-      const parsed = parseM3U(text);
-      onChannelsLoaded(parsed);
       setError(null);
+
+      let parsed = [];
+
+      if (type === "country" || type === "custom") {
+        const response = await fetch(source);
+        if (!response.ok) throw new Error("Failed to fetch playlist");
+        const text = await response.text();
+        parsed = parseM3U(text);
+      } else if (type === "file") {
+        parsed = parseM3U(source);
+      }
+
+      if (parsed.length === 0) {
+        throw new Error("No channels found in playlist");
+      }
+
+      setCurrentSource(name || source);
+      onChannelsLoaded(parsed);
     } catch (err) {
-      setError("Failed to load channels");
+      setError(err.message);
       console.error(err);
     } finally {
       setLoading(false);
     }
   }
 
-  if (loading) return <div className="loading">Loading channels...</div>;
-  if (error) return <div className="error">{error}</div>;
-
   return (
     <div className="playlist">
+      <div className="playlist-header">
+        <h2>
+          Channels{" "}
+          {currentSource && (
+            <span className="source-name">- {currentSource}</span>
+          )}
+        </h2>
+        <PlaylistSource onSourceChange={handleSourceChange} />
+      </div>
+
       <SearchBar value={searchTerm} onChange={onSearch} />
 
-      {channels.length === 0 ? (
-        <div className="no-results">No channels found</div>
-      ) : (
-        <div className="grid">
-          {channels.map((ch, i) => (
-            <ChannelCard key={i} channel={ch} onPlay={onPlay} onFav={onFav} />
-          ))}
-        </div>
+      {loading && <div className="loading">Loading channels...</div>}
+      {error && <div className="error">{error}</div>}
+
+      {!loading && !error && (
+        <>
+          {channels.length === 0 ? (
+            <div className="no-results">
+              No channels loaded. Select a country or add a custom playlist.
+            </div>
+          ) : (
+            <>
+              <div className="channel-count">{channels.length} channels</div>
+              <div className="grid">
+                {channels.map((ch, i) => (
+                  <ChannelCard
+                    key={i}
+                    channel={ch}
+                    onPlay={onPlay}
+                    onFav={onFav}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+        </>
       )}
     </div>
   );
