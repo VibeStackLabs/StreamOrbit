@@ -1,14 +1,30 @@
+import { useState, useEffect } from "react";
+
 export default function SearchBar({ value, onChange }) {
+  const [localValue, setLocalValue] = useState(value);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onChange(localValue);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [localValue, onChange]);
+
   return (
-    <input
-      placeholder="Search channels..."
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      style={{
-        width: "100%",
-        padding: "10px",
-        marginBottom: "10px",
-      }}
-    />
+    <div className="search-container">
+      <input
+        className="search-bar"
+        type="text"
+        placeholder="🔍 Search channels..."
+        value={localValue}
+        onChange={(e) => setLocalValue(e.target.value)}
+      />
+      {localValue && (
+        <button className="clear-search" onClick={() => setLocalValue("")}>
+          ✕
+        </button>
+      )}
+    </div>
   );
 }

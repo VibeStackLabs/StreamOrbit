@@ -1,67 +1,361 @@
-body {
+* {
   margin: 0;
-  background: #111;
-  color: white;
-  font-family: sans-serif;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.layout {
-  display: flex;
+body {
+  background: #0a0a0a;
+  color: #ffffff;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
+    sans-serif;
+}
+
+.app {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background: #1a1a1a;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #333;
+}
+
+.header h1 {
+  font-size: 1.5rem;
+  color: #4f46e5;
+}
+
+.main-layout {
+  display: flex;
+  flex: 1;
 }
 
 .sidebar {
-  width: 250px;
-  padding: 10px;
+  width: 280px;
+  background: #111;
   border-right: 1px solid #333;
+  padding: 1.5rem 1rem;
+  height: calc(100vh - 70px);
+  overflow-y: auto;
 }
 
 .content {
   flex: 1;
-  padding: 20px;
+  padding: 1.5rem;
+  overflow-y: auto;
+  height: calc(100vh - 70px);
 }
 
+/* Player Styles */
+.player-container {
+  margin-bottom: 2rem;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.video-js {
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: #000;
+}
+
+/* Grid Styles */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
 }
 
 .channelCard {
-  background: #222;
-  padding: 10px;
+  background: #1a1a1a;
+  border-radius: 8px;
+  padding: 1rem;
+  position: relative;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
   cursor: pointer;
-  border-radius: 6px;
+  border: 1px solid #333;
 }
 
 .channelCard:hover {
-  background: #333;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+  border-color: #4f46e5;
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .logo {
   width: 100%;
-  height: 60px;
+  height: 80px;
   object-fit: contain;
-  margin-bottom: 6px;
+  border-radius: 4px;
+}
+
+.logo-placeholder {
+  width: 100%;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  background: #222;
+  border-radius: 4px;
+}
+
+.channelName {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #ddd;
+  word-break: break-word;
+}
+
+.fav-button {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: #4f46e5;
+  border: none;
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+
+.fav-button:hover {
+  background: #6366f1;
+}
+
+/* Favorites Styles */
+.favorites {
+  margin-bottom: 2rem;
+}
+
+.favorites h3 {
+  margin-bottom: 1rem;
+  color: #ffd700;
+}
+
+.favorites-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.fav-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  background: #1a1a1a;
+  border-radius: 4px;
+  border: 1px solid #333;
+}
+
+.fav-item span {
+  cursor: pointer;
+  flex: 1;
+  color: #ddd;
+  font-size: 0.9rem;
+}
+
+.fav-item span:hover {
+  color: #4f46e5;
+}
+
+.remove-fav {
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  padding: 0 0.25rem;
+  font-size: 1rem;
+}
+
+.remove-fav:hover {
+  color: #ff4444;
+}
+
+.empty-message {
+  color: #666;
+  font-style: italic;
+  padding: 1rem;
+  text-align: center;
+}
+
+/* Category Filter Styles */
+.category-filter {
+  margin-top: 2rem;
+}
+
+.category-filter h3 {
+  margin-bottom: 1rem;
+  color: #888;
 }
 
 .categories {
   display: flex;
-  gap: 6px;
-  margin-bottom: 12px;
   flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
 .categories button {
-  padding: 6px 10px;
+  padding: 0.5rem 1rem;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 20px;
+  color: #ddd;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.85rem;
 }
 
-.categories .active {
+.categories button:hover {
+  background: #333;
+  border-color: #4f46e5;
+}
+
+.categories button.active {
+  background: #4f46e5;
+  border-color: #4f46e5;
+  color: white;
+}
+
+/* Search Bar Styles */
+.search-container {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.search-bar {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  color: white;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.search-bar:focus {
+  outline: none;
+  border-color: #4f46e5;
+}
+
+.clear-search {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0.25rem;
+}
+
+.clear-search:hover {
+  color: #fff;
+}
+
+/* Add Stream Styles */
+.add-stream {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.add-stream input {
+  flex: 1;
+  padding: 0.5rem;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 4px;
+  color: white;
+}
+
+.add-stream button {
+  padding: 0.5rem 1rem;
+  background: #4f46e5;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.add-stream button:hover {
+  background: #6366f1;
+}
+
+/* Loading and Error States */
+.loading,
+.error,
+.no-results {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+}
+
+.error {
+  color: #ff4444;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
   background: #4f46e5;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 12px;
+/* Responsive Design */
+@media (max-width: 768px) {
+  .main-layout {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid #333;
+  }
+
+  .header {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
 }
