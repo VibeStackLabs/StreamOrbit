@@ -1,38 +1,38 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Player from "./components/Player";
 import Playlist from "./components/Playlist";
+import Favorites from "./components/Favorites";
 import AddStream from "./components/AddStream";
 
 export default function App() {
   const [stream, setStream] = useState("");
+  const [favorites, setFavorites] = useState([]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("favorites");
+
+    if (saved) setFavorites(JSON.parse(saved));
+  }, []);
+
+  function addFav(channel) {
+    const updated = [...favorites, channel];
+
+    setFavorites(updated);
+    localStorage.setItem("favorites", JSON.stringify(updated));
+  }
 
   return (
-    <div
-      style={{
-        display: "flex",
-        height: "100vh",
-        background: "#111",
-        color: "white",
-      }}
-    >
-      <div
-        style={{
-          width: "300px",
-          borderRight: "1px solid #333",
-        }}
-      >
+    <div className="layout">
+      <div className="sidebar">
         <AddStream onAdd={setStream} />
 
-        <Playlist onSelect={setStream} />
+        <Favorites list={favorites} onPlay={setStream} />
       </div>
 
-      <div
-        style={{
-          flex: 1,
-          padding: "20px",
-        }}
-      >
+      <div className="content">
         <Player stream={stream} />
+
+        <Playlist onPlay={setStream} onFav={addFav} />
       </div>
     </div>
   );

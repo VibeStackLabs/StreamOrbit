@@ -1,46 +1,34 @@
 import { useEffect, useState } from "react";
+import parseM3U from "../utils/parseM3U";
+import ChannelCard from "./ChannelCard";
+import SearchBar from "./SearchBar";
 
-export default function Playlist({ onSelect }) {
+export default function Playlist({ onPlay, onFav }) {
   const [channels, setChannels] = useState([]);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     fetch("https://iptv-org.github.io/iptv/countries/in.m3u")
       .then((res) => res.text())
       .then((text) => {
-        const lines = text.split("\n");
-        let list = [];
-
-        for (let i = 0; i < lines.length; i++) {
-          if (lines[i].startsWith("#EXTINF")) {
-            const name = lines[i].split(",")[1];
-            const url = lines[i + 1];
-
-            list.push({
-              name,
-              url,
-            });
-          }
-        }
-
-        setChannels(list);
+        const parsed = parseM3U(text);
+        setChannels(parsed);
       });
   }, []);
 
+  const filtered = channels.filter((c) =>
+    c.name.toLowerCase().includes(search.toLowerCase()),
+  );
+
   return (
-    <div style={{ overflow: "auto", height: "100%" }}>
-      {channels.map((ch, i) => (
-        <div
-          key={i}
-          onClick={() => onSelect(ch.url)}
-          style={{
-            padding: "8px",
-            cursor: "pointer",
-            borderBottom: "1px solid #333",
-          }}
-        >
-          {ch.name}
-        </div>
-      ))}
+    <div>
+      <SearchBar value={search} onChange={setSearch} />
+
+      <div className="grid">
+        {filtered.map((ch, i) => (
+          <ChannelCard key={i} channel={ch} onPlay={onPlay} onFav={onFav} />
+        ))}
+      </div>
     </div>
   );
 }

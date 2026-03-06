@@ -1,33 +1,31 @@
 import { useEffect, useRef } from "react";
-import Hls from "hls.js";
+import videojs from "video.js";
+import "video.js/dist/video-js.css";
 
 export default function Player({ stream }) {
   const videoRef = useRef(null);
+  const playerRef = useRef(null);
 
   useEffect(() => {
-    if (!stream) return;
+    if (!playerRef.current) {
+      playerRef.current = videojs(videoRef.current, {
+        controls: true,
+        autoplay: true,
+        fluid: true,
+      });
+    }
 
-    const video = videoRef.current;
-
-    if (Hls.isSupported()) {
-      const hls = new Hls();
-      hls.loadSource(stream);
-      hls.attachMedia(video);
-    } else {
-      video.src = stream;
+    if (stream) {
+      playerRef.current.src({
+        src: stream,
+        type: "application/x-mpegURL",
+      });
     }
   }, [stream]);
 
   return (
-    <video
-      ref={videoRef}
-      controls
-      autoPlay
-      style={{
-        width: "100%",
-        maxHeight: "500px",
-        background: "black",
-      }}
-    />
+    <div data-vjs-player>
+      <video ref={videoRef} className="video-js vjs-big-play-centered" />
+    </div>
   );
 }
