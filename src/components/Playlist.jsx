@@ -14,7 +14,7 @@ export default function Playlist({
 }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [currentSource, setCurrentSource] = useState("India");
+  const [currentSource, setCurrentSource] = useState("");
 
   async function handleSourceChange(type, source, name) {
     try {
@@ -23,9 +23,16 @@ export default function Playlist({
 
       let parsed = [];
 
-      if (type === "country" || type === "custom") {
+      if (
+        type === "country" ||
+        type === "category" ||
+        type === "language" ||
+        type === "region" ||
+        type === "custom"
+      ) {
+        console.log(`Fetching ${type} playlist:`, source);
         const response = await fetch(source);
-        if (!response.ok) throw new Error("Failed to fetch playlist");
+        if (!response.ok) throw new Error(`Failed to fetch ${type} playlist`);
         const text = await response.text();
         parsed = parseM3U(text);
       } else if (type === "file") {
@@ -36,7 +43,9 @@ export default function Playlist({
         throw new Error("No channels found in playlist");
       }
 
-      setCurrentSource(name || source);
+      // Capitalize first letter of type for display
+      const typeDisplay = type.charAt(0).toUpperCase() + type.slice(1);
+      setCurrentSource(`${typeDisplay}: ${name}`);
       onChannelsLoaded(parsed);
     } catch (err) {
       setError(err.message);
@@ -50,9 +59,9 @@ export default function Playlist({
     <div className="playlist">
       <div className="playlist-header">
         <h2>
-          Channels{" "}
+          Channel Guide
           {currentSource && (
-            <span className="source-name">- {currentSource}</span>
+            <span className="source-name"> - {currentSource}</span>
           )}
         </h2>
         <PlaylistSource onSourceChange={handleSourceChange} />
@@ -60,18 +69,38 @@ export default function Playlist({
 
       <SearchBar value={searchTerm} onChange={onSearch} />
 
-      {loading && <div className="loading">Loading channels...</div>}
-      {error && <div className="error">{error}</div>}
+      {loading && (
+        <div className="loading">
+          <div className="spinner"></div>
+          <p>Loading channels...</p>
+        </div>
+      )}
+
+      {error && (
+        <div className="error">
+          <p>❌ {error}</p>
+          <button onClick={() => setError(null)} className="retry-btn">
+            Try Again
+          </button>
+        </div>
+      )}
 
       {!loading && !error && (
         <>
           {channels.length === 0 ? (
             <div className="no-results">
-              No channels loaded. Select a country or add a custom playlist.
+              <p>No channels loaded. Select a source above to get started!</p>
+              <div className="suggestions">
+                <small>
+                  Try: Country → India, Category → News, or Language → English
+                </small>
+              </div>
             </div>
           ) : (
             <>
-              <div className="channel-count">{channels.length} channels</div>
+              <div className="channel-count">
+                📺 {channels.length} channels available
+              </div>
               <div className="grid">
                 {channels.map((ch, i) => (
                   <ChannelCard

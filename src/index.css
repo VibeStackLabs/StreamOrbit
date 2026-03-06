@@ -495,3 +495,84 @@ body {
   border-radius: 4px;
   text-align: right;
 }
+
+.source-type-selector {
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #333;
+}
+
+.source-type-selector select {
+  width: 100%;
+  padding: 0.5rem;
+  background: #222;
+  border: 1px solid #444;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+
+.custom-toggle {
+  width: 100%;
+  background: #2d2d2d !important;
+  border: 1px dashed #4f46e5 !important;
+}
+
+.custom-toggle:hover {
+  background: #3d3d3d !important;
+}
+
+.load-btn {
+  background: #22c55e !important;
+  min-width: 70px;
+}
+
+.load-btn:hover {
+  background: #16a34a !important;
+}
+
+.spinner {
+  border: 3px solid #333;
+  border-top: 3px solid #4f46e5;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.retry-btn {
+  background: #4f46e5;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  margin-top: 1rem;
+  cursor: pointer;
+}
+
+.suggestions {
+  margin-top: 1rem;
+  color: #666;
+  font-style: italic;
+}
+
+.channel-count {
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  display: inline-block;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
