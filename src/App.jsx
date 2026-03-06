@@ -59,6 +59,31 @@ export default function App() {
     setStream(filteredChannels[newIndex].url);
   }
 
+  function handleCategoryChange(category) {
+    setSelectedCategory(category);
+    filterChannels(category, searchTerm);
+  }
+
+  function handleSearch(term) {
+    setSearchTerm(term);
+    filterChannels(selectedCategory, term);
+  }
+
+  function filterChannels(category, search) {
+    let result = channels;
+    if (category !== "All") {
+      result = result.filter((ch) => ch.category === category);
+    }
+
+    if (search) {
+      result = result.filter((ch) =>
+        ch.name.toLowerCase().includes(search.toLowerCase()),
+      );
+    }
+
+    setFilteredChannels(result);
+  }
+
   function toggleFavorite() {
     if (currentChannelIndex >= 0) {
       const channel = filteredChannels[currentChannelIndex];
@@ -138,7 +163,7 @@ export default function App() {
           <CategoryFilter
             categories={categories}
             current={selectedCategory}
-            onChange={setSelectedCategory}
+            onChange={handleCategoryChange}
           />
         </aside>
 
@@ -172,7 +197,7 @@ export default function App() {
           <Playlist
             onPlay={handlePlay}
             onFav={addFav}
-            onSearch={setSearchTerm}
+            onSearch={handleSearch}
             channels={filteredChannels}
             onChannelsLoaded={(chs) => {
               setChannels(chs);
