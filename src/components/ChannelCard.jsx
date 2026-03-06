@@ -1,12 +1,6 @@
 import { useState } from "react";
 
-export default function ChannelCard({
-  channel,
-  onPlay,
-  onFav,
-  isDead,
-  onTest,
-}) {
+export default function ChannelCard({ channel, onPlay, onFav, isDead }) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -52,16 +46,6 @@ export default function ChannelCard({
               ⭐
             </button>
           )}
-          <button
-            className="action-button test-button"
-            onClick={(e) => {
-              e.stopPropagation();
-              onTest();
-            }}
-            title="Test channel"
-          >
-            {isDead ? "🩺 Retest" : "🔍 Test"}
-          </button>
         </div>
       )}
     </div>
