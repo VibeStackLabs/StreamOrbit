@@ -1,6 +1,15 @@
+// hooks/useKeyboardNav.js
 import { useEffect } from "react";
 
-export default function useKeyboardNav({ onNext, onPrev, onToggleFav }) {
+export default function useKeyboardNav({
+  onNext,
+  onPrev,
+  onToggleFav,
+  onOpenNavigator,
+  onPlayPause,
+  onVolumeUp,
+  onVolumeDown,
+}) {
   useEffect(() => {
     function handleKeyDown(e) {
       // Don't trigger if user is typing in an input
@@ -9,51 +18,68 @@ export default function useKeyboardNav({ onNext, onPrev, onToggleFav }) {
       }
 
       switch (e.key) {
+        // Channel navigation
         case "ArrowRight":
+        case "ArrowDown":
           e.preventDefault();
-          onNext();
+          onNext?.();
           break;
         case "ArrowLeft":
+        case "ArrowUp":
           e.preventDefault();
-          onPrev();
+          onPrev?.();
           break;
+
+        // Quick actions
         case "f":
         case "F":
           e.preventDefault();
-          onToggleFav();
+          onToggleFav?.();
           break;
+
+        // Open channel guide
+        case "g":
+        case "G":
+          e.preventDefault();
+          onOpenNavigator?.();
+          break;
+
+        // Play/Pause
         case " ":
           e.preventDefault();
-          togglePlayPause();
+          onPlayPause?.();
           break;
-        case "Escape":
+
+        // Volume
+        case "+":
+        case "=":
           e.preventDefault();
-          exitFullscreen();
+          onVolumeUp?.();
           break;
-      }
-    }
+        case "-":
+        case "_":
+          e.preventDefault();
+          onVolumeDown?.();
+          break;
 
-    function togglePlayPause() {
-      const player = document.querySelector(".video-js");
-      if (player) {
-        const videoPlayer = videojs.getPlayer(player.id);
-        if (videoPlayer) {
-          if (videoPlayer.paused()) {
-            videoPlayer.play();
-          } else {
-            videoPlayer.pause();
+        // Exit fullscreen
+        case "Escape":
+          if (document.fullscreenElement) {
+            document.exitFullscreen();
           }
-        }
-      }
-    }
-
-    function exitFullscreen() {
-      if (document.fullscreenElement) {
-        document.exitFullscreen();
+          break;
       }
     }
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [onNext, onPrev, onToggleFav]);
+  }, [
+    onNext,
+    onPrev,
+    onToggleFav,
+    onOpenNavigator,
+    onPlayPause,
+    onVolumeUp,
+    onVolumeDown,
+  ]);
 }
