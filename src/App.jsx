@@ -7,6 +7,7 @@ import AddStream from "./components/AddStream";
 import CategoryFilter from "./components/CategoryFilter";
 import ChannelNavigator from "./components/ChannelNavigator";
 import useKeyboardNav from "./hooks/useKeyboardNav";
+import PWAUpdate from "./components/PWAUpdate";
 import "./App.css";
 
 export default function App() {
@@ -203,9 +204,18 @@ export default function App() {
   return (
     <div className="app">
       <header className="header">
-        <h1>📺 IPTV Player</h1>
+        <div className="header-left">
+          <img
+            src="/web-app-manifest-192x192.png"
+            alt="StreamOrbit"
+            className="app-icon"
+          />
+          <h1>StreamOrbit</h1>
+        </div>
         <AddStream onAdd={setStream} />
       </header>
+
+      <PWAUpdate />
 
       <div className="main-layout">
         <aside className="sidebar">

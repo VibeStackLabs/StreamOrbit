@@ -18,6 +18,13 @@ body {
   flex-direction: column;
 }
 
+.app-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
 .header {
   background: #1a1a1a;
   padding: 1rem 2rem;
@@ -27,9 +34,16 @@ body {
   border-bottom: 1px solid #333;
 }
 
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .header h1 {
   font-size: 1.5rem;
   color: #4f46e5;
+  margin: 0;
 }
 
 .main-layout {
@@ -1046,4 +1060,59 @@ body {
 .player-container {
   position: relative;
   margin-bottom: 2rem;
+}
+
+.pwa-update-banner {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #4f46e5;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 30px;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  z-index: 3000;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+  animation: slideUp 0.3s ease;
+}
+
+.pwa-update-banner button {
+  background: white;
+  color: #4f46e5;
+  border: none;
+  padding: 0.25rem 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.pwa-update-banner button:hover {
+  background: #f0f0f0;
+}
+
+.pwa-update-banner button:last-child {
+  background: transparent;
+  color: white;
+  border: 1px solid white;
+}
+
+.pwa-update-banner button:last-child:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Offline Banner */
+.pwa-offline-banner {
+  position: fixed;
+  top: 70px;
+  left: 0;
+  right: 0;
+  background: #f59e0b;
+  color: white;
+  text-align: center;
+  padding: 0.5rem;
+  z-index: 1000;
+  font-size: 0.9rem;
 }
