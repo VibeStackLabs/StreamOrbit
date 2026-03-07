@@ -36,7 +36,6 @@ export default function PlaylistSource({ onSourceChange }) {
     "sports",
     "travel",
     "weather",
-    "xxx",
     "undefined",
   ];
 

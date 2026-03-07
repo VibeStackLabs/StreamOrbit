@@ -20,6 +20,8 @@ export default function App() {
   const [currentChannelIndex, setCurrentChannelIndex] = useState(-1);
   const [showNavigator, setShowNavigator] = useState(false);
   const [showFavNotification, setShowFavNotification] = useState(false);
+  const [showChannelInfo, setShowChannelInfo] = useState(true);
+  const [hideTimeout, setHideTimeout] = useState(null);
 
   // Load favorites
   useEffect(() => {
@@ -43,6 +45,22 @@ export default function App() {
     onVolumeDown: () => adjustVolume(-0.1),
   });
 
+  function showChannelInfoWithTimer() {
+    setShowChannelInfo(true);
+
+    // Clear existing timeout
+    if (hideTimeout) {
+      clearTimeout(hideTimeout);
+    }
+
+    // Set new timeout to hide after 3 seconds
+    const timeout = setTimeout(() => {
+      setShowChannelInfo(false);
+    }, 3000); // Hide after 3 seconds
+
+    setHideTimeout(timeout);
+  }
+
   function navigateChannel(direction) {
     if (filteredChannels.length === 0) return;
 
@@ -57,6 +75,7 @@ export default function App() {
 
     setCurrentChannelIndex(newIndex);
     setStream(filteredChannels[newIndex].url);
+    showChannelInfoWithTimer();
   }
 
   function handleCategoryChange(category) {
@@ -143,7 +162,39 @@ export default function App() {
     setStream(url);
     const index = filteredChannels.findIndex((ch) => ch.url === url);
     setCurrentChannelIndex(index);
+    showChannelInfoWithTimer();
   }
+
+  useEffect(() => {
+    const handleMouseMove = () => {
+      if (!showChannelInfo) {
+        setShowChannelInfo(true);
+        // Hide again after 3 seconds
+        if (hideTimeout) clearTimeout(hideTimeout);
+        const timeout = setTimeout(() => setShowChannelInfo(false), 3000);
+        setHideTimeout(timeout);
+      }
+    };
+
+    const playerContainer = document.querySelector(".player-container");
+    if (playerContainer) {
+      playerContainer.addEventListener("mousemove", handleMouseMove);
+    }
+
+    return () => {
+      if (playerContainer) {
+        playerContainer.removeEventListener("mousemove", handleMouseMove);
+      }
+      if (hideTimeout) clearTimeout(hideTimeout);
+    };
+  }, [showChannelInfo, hideTimeout]);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (hideTimeout) clearTimeout(hideTimeout);
+    };
+  }, []);
 
   return (
     <div className="app">
@@ -172,8 +223,10 @@ export default function App() {
             <div className="player-container">
               <Player stream={stream} />
 
-              {/* Channel info overlay */}
-              <div className="channel-info">
+              {/* Channel info overlay with auto-hide */}
+              <div
+                className={`channel-info ${showChannelInfo ? "visible" : "hidden"}`}
+              >
                 <div className="channel-info-content">
                   <span className="channel-number">
                     CH {currentChannelIndex + 1}
@@ -188,7 +241,9 @@ export default function App() {
               </div>
 
               {/* Keyboard shortcuts hint */}
-              <div className="shortcuts-hint">
+              <div
+                className={`shortcuts-hint ${showChannelInfo ? "visible" : "hidden"}`}
+              >
                 <span>↑↓ Change Channel • F Favorite • G Guide</span>
               </div>
             </div>

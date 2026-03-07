@@ -11,7 +11,7 @@ export default function AddStream({ onAdd }) {
   }
 
   return (
-    <div style={{ padding: "10px", borderBottom: "1px solid #333" }}>
+    <div className="add-stream">
       <input
         placeholder="Paste stream url (.m3u8)"
         value={url}

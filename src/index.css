@@ -927,3 +927,91 @@ body {
   animation: spin 1s linear infinite;
   margin: 0 auto 1rem;
 }
+
+/* Channel Info Overlay - Auto hide */
+.channel-info {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+  padding: 0.75rem 1.5rem;
+  border-radius: 30px;
+  border-left: 3px solid #4f46e5;
+  z-index: 10;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.channel-info.hidden {
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+}
+
+/* Shortcuts Hint - Auto hide */
+.shortcuts-hint {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(5px);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  color: #888;
+  z-index: 10;
+  transition: opacity 0.3s ease;
+  opacity: 1;
+}
+
+.shortcuts-hint.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Player container for positioning */
+.player-container {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+/* Animation for channel change */
+@keyframes channelChange {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.channel-info.changed {
+  animation: channelChange 0.3s ease;
+}
+
+.add-stream {
+  display: flex;
+  gap: 0.5rem;
+  max-width: 500px;
+}
+
+.add-stream input {
+  flex: 1;
+  padding: 0.5rem 1rem;
+  background: #222;
+  border: 1px solid #444;
+  border-radius: 4px;
+  color: white;
+}
+
+.add-stream input:focus {
+  outline: none;
+  border-color: #4f46e5;
+}
