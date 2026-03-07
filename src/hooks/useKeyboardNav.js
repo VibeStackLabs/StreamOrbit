@@ -66,6 +66,8 @@ export default function useKeyboardNav({
         case "Escape":
           if (document.fullscreenElement) {
             document.exitFullscreen();
+          } else if (stream) {
+            onClosePlayer?.();
           }
           break;
       }

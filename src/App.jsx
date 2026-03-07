@@ -43,6 +43,10 @@ export default function App() {
     onPlayPause: togglePlayPause,
     onVolumeUp: () => adjustVolume(0.1),
     onVolumeDown: () => adjustVolume(-0.1),
+    onClosePlayer: () => {
+      setStream("");
+      setCurrentChannelIndex(-1);
+    },
   });
 
   function showChannelInfoWithTimer() {
@@ -221,6 +225,18 @@ export default function App() {
         <main className="content">
           {stream && (
             <div className="player-container">
+              {/* Add close button */}
+              <button
+                className="player-close-btn"
+                onClick={() => {
+                  setStream("");
+                  setCurrentChannelIndex(-1);
+                }}
+                title="Close Player"
+              >
+                ✕
+              </button>
+
               <Player stream={stream} />
 
               {/* Channel info overlay with auto-hide */}
