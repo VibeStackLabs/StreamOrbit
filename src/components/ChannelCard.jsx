@@ -20,7 +20,11 @@ export default function ChannelCard({ channel, onPlay, onFav, isDead }) {
             className="logo"
             onError={(e) => {
               e.target.onerror = null;
-              e.target.src = "https://via.placeholder.com/60x40?text=TV";
+              e.target.style.display = "none";
+              const placeholder = document.createElement("div");
+              placeholder.className = "logo-placeholder";
+              placeholder.textContent = "📺";
+              e.target.parentNode.appendChild(placeholder);
             }}
           />
         ) : (
