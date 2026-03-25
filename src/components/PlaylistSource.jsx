@@ -1,9 +1,13 @@
 import { useState } from "react";
+import { loadFromJsonIndex } from "../utils/parseJsonIndex";
 
 export default function PlaylistSource({ onSourceChange }) {
   const [showCustom, setShowCustom] = useState(false);
   const [customUrl, setCustomUrl] = useState("");
   const [sourceType, setSourceType] = useState("country"); // country, category, language, region
+  const [showJsonIndex, setShowJsonIndex] = useState(false);
+  const [jsonIndexUrl, setJsonIndexUrl] = useState("");
+  const [loadingProgress, setLoadingProgress] = useState(null);
 
   // Categories from the list
   const categories = [
@@ -229,6 +233,33 @@ export default function PlaylistSource({ onSourceChange }) {
     }
   }
 
+  async function handleJsonIndexUrl() {
+    if (!jsonIndexUrl) return;
+
+    setLoadingProgress({ current: 0, total: 0, title: "Starting..." });
+
+    try {
+      const channels = await loadFromJsonIndex(jsonIndexUrl, (progress) => {
+        setLoadingProgress(progress);
+      });
+
+      if (channels.length > 0) {
+        onSourceChange("json-index", channels, "JSON Index Playlist");
+      } else {
+        alert("No channels found in the JSON index");
+      }
+    } catch (error) {
+      console.error("Failed to load JSON index:", error);
+      alert(
+        "Failed to load playlist from JSON index. Check console for details.",
+      );
+    } finally {
+      setLoadingProgress(null);
+      setJsonIndexUrl("");
+      setShowJsonIndex(false);
+    }
+  }
+
   return (
     <div className="playlist-source">
       <div className="source-type-selector">
@@ -306,11 +337,12 @@ export default function PlaylistSource({ onSourceChange }) {
       )}
 
       <div className="source-section">
+        <label>🔗 Custom M3U URL:</label>
         <button
           onClick={() => setShowCustom(!showCustom)}
           className="custom-toggle"
         >
-          {showCustom ? "Cancel" : "➕ Add Custom URL"}
+          {showCustom ? "Cancel" : "➕ Add M3U URL"}
         </button>
 
         {showCustom && (
@@ -323,6 +355,36 @@ export default function PlaylistSource({ onSourceChange }) {
             />
             <button onClick={handleCustomUrl} className="load-btn">
               Load
+            </button>
+          </div>
+        )}
+      </div>
+
+      <div className="source-section">
+        <label>🔗 Custom JSON Index URL:</label>
+        <button
+          onClick={() => setShowJsonIndex(!showJsonIndex)}
+          className="custom-toggle"
+        >
+          {showJsonIndex ? "Cancel" : "➕ Add JSON Index URL"}
+        </button>
+
+        {showJsonIndex && (
+          <div className="custom-url-input">
+            <input
+              type="url"
+              placeholder="https://example.com/playlist.json"
+              value={jsonIndexUrl}
+              onChange={(e) => setJsonIndexUrl(e.target.value)}
+            />
+            <button
+              onClick={handleJsonIndexUrl}
+              className="load-btn"
+              disabled={loadingProgress !== null}
+            >
+              {loadingProgress
+                ? `Loading: ${loadingProgress.title} (${loadingProgress.current}/${loadingProgress.total})`
+                : "Load"}
             </button>
           </div>
         )}

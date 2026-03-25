@@ -1,4 +1,3 @@
-// App.jsx (simplified version)
 import { useState, useEffect } from "react";
 import Player from "./components/Player";
 import Playlist from "./components/Playlist";

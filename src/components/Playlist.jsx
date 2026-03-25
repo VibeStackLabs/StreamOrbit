@@ -43,13 +43,18 @@ export default function Playlist({
         parsed = parseM3U(text);
       } else if (type === "file") {
         parsed = parseM3U(source);
+      } else if (type === "json-index") {
+        parsed = source;
       }
 
       if (parsed.length === 0) {
         throw new Error("No channels found in playlist");
       }
 
-      const typeDisplay = type.charAt(0).toUpperCase() + type.slice(1);
+      const typeDisplay =
+        type === "json-index"
+          ? "JSON Index"
+          : type.charAt(0).toUpperCase() + type.slice(1);
       setCurrentSource(`${typeDisplay}: ${name}`);
       onChannelsLoaded(parsed);
     } catch (err) {
